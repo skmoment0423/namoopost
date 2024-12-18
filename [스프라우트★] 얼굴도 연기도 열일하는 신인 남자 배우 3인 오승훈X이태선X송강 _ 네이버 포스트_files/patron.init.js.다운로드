@@ -1,0 +1,41 @@
+(function(window, ns) {
+	'use strict';
+	/**
+	* patron common module
+	* Copyright (c) 2017 NAVER Corp.
+	* @version 1.0.0
+	*/
+
+	/**
+	 * Patron initializer
+	 * @namespace patron
+	 * @author jaesung.park@navercorp.com
+	 * @date 2017-07-28
+	 */
+	window[ns] = {
+		version: "1.0.0",  // version
+		url: "https://common-patron.pstatic.net/dist/patron.min.js",  // 로딩될 주소
+
+		init: function (options) {
+			try {
+				var s = document.createElement("script");
+				s.type = "text/javascript";
+				s.src = [this.url, new Date().toISOString().replace(/\D/g, "").slice(0, 8)].join("?v=");
+				(document.head || document.getElementsByTagName("head")[0]).appendChild(s);
+
+				// run callback after loading finishes
+				s.onload = s.onreadystatechange = function () {
+					if (!s.readyState || /^(loaded|complete)$/.test(s.readyState)) {
+						// 후원 초기화
+						window[ns].init(options);
+
+						s.onload = s.onreadystatechange = null;
+						s && s.parentNode && s.parentNode.removeChild(s);
+					}
+				};
+			}catch (e){
+				//patron-button common js file loading fail.
+			}
+		}
+	};
+}(window, "patron"));
